@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Manga Expert - 60 Questions 🎌</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 30px;
+            width: 500px;
+            max-width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 2px rgba(233, 69, 96, 0.3);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            color: #0f3460;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #0f3460, #e94560);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 2px rgba(233, 69, 96, 0.5)); }
+            50% { filter: drop-shadow(0 0 10px rgba(233, 69, 96, 0.8)); }
+            100% { filter: drop-shadow(0 0 2px rgba(233, 69, 96, 0.5)); }
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #0f3460, #1a4a7a);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: scorePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scorePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .score-display span {
+            color: #e94560;
+            font-size: 24px;
+            margin-left: 5px;
+        }
+
+        #question-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 4px solid #0f3460;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #question-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        #question {
+            color: #16213e;
+            font-size: 22px;
+            margin-bottom: 20px;
+            min-height: 70px;
+            font-weight: 600;
+            padding: 10px;
+            background: rgba(15, 52, 96, 0.1);
+            border-radius: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timer-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #ff6b7c);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px #e94560;
+        }
+
+        .timer-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0f3460;
+            margin-top: 5px;
+        }
+
+        .timer-text.warning {
+            color: #e94560;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .answers button {
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #0f3460, #1a4a7a);
+            color: white;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: buttonPop 0.4s ease;
+        }
+
+        @keyframes buttonPop {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .answers button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .answers button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .answers button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1a4a7a, #0f3460);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.4);
+            border-color: #e94560;
+        }
+
+        .answers button.correct {
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+            transform: scale(1.05);
+            border-color: #fff;
+            box-shadow: 0 0 25px #2ecc71;
+            animation: correctPulse 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .answers button.wrong {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            transform: scale(0.95);
+            border-color: #fff;
+            box-shadow: 0 0 25px #e74c3c;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .answers button:disabled {
+            opacity: 0.9;
+            cursor: not-allowed;
+        }
+
+        .progress {
+            color: #0f3460;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px;
+            background: rgba(233, 69, 96, 0.1);
+            border-radius: 10px;
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0% { background: rgba(233, 69, 96, 0.1); }
+            50% { background: rgba(233, 69, 96, 0.2); }
+            100% { background: rgba(233, 69, 96, 0.1); }
+        }
+
+        #result {
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #result h2 {
+            color: #0f3460;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        #score {
+            font-size: 28px;
+            color: #e94560;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: scorePop 1s ease;
+        }
+
+        @keyframes scorePop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .victory-message {
+            font-size: 24px;
+            color: gold;
+            text-shadow: 0 0 10px orange;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.2));
+            border-radius: 50px;
+            animation: victoryGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes victoryGlow {
+            0% { box-shadow: 0 0 10px gold; }
+            50% { box-shadow: 0 0 30px gold; }
+            100% { box-shadow: 0 0 10px gold; }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e94560, #ff6b7c);
+            color: white;
+            padding: 16px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(233, 69, 96, 0.6);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+
+    <h1>Quiz Manga Expert 🎌</h1>
+
+    <!-- Audio invisible qui joue automatiquement en boucle -->
+    <audio id="bgMusic" loop preload="auto" style="display: none;">
+        <source src="ana.mpeg" type="audio/mpeg">
+        <source src="manga.mp3" type="audio/mpeg">
+        <source src="onepiece.mp3" type="audio/mpeg">
+        <source src="bleach.mp3" type="audio/mpeg">
+        <source src="aot.mp3" type="audio/mpeg">
+        <source src="ds.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Affichage du score en points -->
+    <div class="score-display">
+        🏆 POINTS: <span id="score-points">0</span> / 600
+    </div>
+    
+    <img id="question-image" src="" alt="Image manga">
+    
+    <!-- Timer -->
+    <div class="timer-container">
+        <div class="timer-bar">
+            <div id="timer-progress" class="timer-progress" style="width: 100%;"></div>
+        </div>
+        <div id="timer-text" class="timer-text">⏱️ 20 secondes</div>
+    </div>
+    
+    <div id="question-container">
+        <h2 id="question">Question ici</h2>
+        <div id="answers" class="answers"></div>
+    </div>
+
+    <div class="progress" id="progress"></div>
+
+    <div id="result" class="hidden">
+        <h2>Résultat final</h2>
+        <p id="score"></p>
+        <div id="victoryMessage" class="victory-message hidden">🏆 VICTOIRE ! 600 POINTS ! 🏆</div>
+        <button onclick="restartQuiz()" class="btn">Nouveau quiz</button>
+    </div>
+</div>
+
+<script>
+// Fonction pour mélanger un tableau (algorithme de Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Variables pour le timer
+let timerInterval;
+let timeLeft = 20;
+let timerActive = false;
+
+// Variables pour le score
+let score = 0;
+const POINTS_PAR_QUESTION = 10;
+const SCORE_MAX = 600; // 60 questions * 10 points
+
+// Tableau des questions (sans audio)
+const questions = [
+    // Naruto (15 questions)
+    {
+        question: "Quel est le nom du père de Naruto ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZjE5cW1wcjV3bDU3cDc5NWEyZG4zcnI2NTJzYXdobDNpNXFhcW9yMSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LCrSiaYF7sR3iWwQJt/giphy.gif",
+        answers: [
+            { text: "Minato Namikaze", correct: true },
+            { text: "Jiraiya", correct: false },
+            { text: "Kakashi Hatake", correct: false },
+            { text: "Orochimaru", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le véritable nom de Pain ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MW51MGc2ZmZ2b3c2MDJqc3djOWdpNDgwMWhod3RpYWZsc3doM2s3NiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/QJFWPLi31XohL3NZ5W/giphy.gif",
+        answers: [
+            { text: "Nagato", correct: true },
+            { text: "Yahiko", correct: false },
+            { text: "Konan", correct: false },
+            { text: "Obito", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du Sharingan ultime de Madara ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHdmZXNlOG9rZWYzNXdtZnZ6djU5bjJieDJ4OG9la2xybWd4aHZ4NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1dMlPP0fybIZy/giphy.gif",
+        answers: [
+            { text: "Rinne Sharingan", correct: true },
+            { text: "Mangekyo Sharingan", correct: false },
+            { text: "Byakugan", correct: false },
+            { text: "Tenseigan", correct: false }
+        ]
+    },
+    {
+        question: "Qui a créé l'Edo Tensei ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/UzUtzQLJ7vbyVsZuuT/giphy.gif",
+        answers: [
+            { text: "Tobirama Senju", correct: true },
+            { text: "Hashirama Senju", correct: false },
+            { text: "Orochimaru", correct: false },
+            { text: "Kabuto", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du démon scellé en Gaara ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHdmZXNlOG9rZWYzNXdtZnZ6djU5bjJieDJ4OG9la2xybWd4aHZ4NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/HXe4JQGgxe3fO/giphy.gif",
+        answers: [
+            { text: "Shukaku", correct: true },
+            { text: "Kurama", correct: false },
+            { text: "Matatabi", correct: false },
+            { text: "Isobu", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le fondateur de l'Akatsuki ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vKHxl6iM2aZdtTdJ0Y/giphy.gif",
+        answers: [
+            { text: "Yahiko", correct: true },
+            { text: "Nagato", correct: false },
+            { text: "Obito", correct: false },
+            { text: "Madara", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du clan de Neji ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXYxampvMnIyOTZtcHlhZ253OHIxZGhtN2F0amlsMHNlMDQ3bHo5NiZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/3owzW9t7Fgt7JiFHfW/giphy.gif",
+        answers: [
+            { text: "Hyuga", correct: true },
+            { text: "Uchiwa", correct: false },
+            { text: "Senju", correct: false },
+            { text: "Nara", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du premier Hokage ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/N58glDmlxrlqZc99jj/giphy.gif",
+        answers: [
+            { text: "Hashirama Senju", correct: true },
+            { text: "Tobirama", correct: false },
+            { text: "Hiruzen", correct: false },
+            { text: "Minato", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du troisième Hokage ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXYxampvMnIyOTZtcHlhZ253OHIxZGhtN2F0amlsMHNlMDQ3bHo5NiZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/OfkGZ5H2H3f8Y/giphy.gif",
+        answers: [
+            { text: "Hiruzen Sarutobi", correct: true },
+            { text: "Minato Namikaze", correct: false },
+            { text: "Tsunade", correct: false },
+            { text: "Kakashi", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du père de Sasuke ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PQWj5rXzHqYwVJ3fX9/giphy.gif",
+        answers: [
+            { text: "Fugaku Uchiwa", correct: true },
+            { text: "Madara Uchiwa", correct: false },
+            { text: "Itachi Uchiwa", correct: false },
+            { text: "Obito Uchiwa", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du chef de l'Akatsuki ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3Y3hyODFlN2ZobTM0MHk0bmFxc3RuamZudWM2bnNkMnc4YjdoeTBoNiZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/meJN6qdG74lUKAJTQl/giphy.gif",
+        answers: [
+            { text: "Pain", correct: true },
+            { text: "Itachi", correct: false },
+            { text: "Orochimaru", correct: false },
+            { text: "Kisame", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le meilleur ami d'enfance de Naruto ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7kpGVMy90GtOY1qFQQ/giphy.gif",
+        answers: [
+            { text: "Sasuke", correct: true },
+            { text: "Shikamaru", correct: false },
+            { text: "Kiba", correct: false },
+            { text: "Neji", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du sensei de Naruto ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3Y3hyODFlN2ZobTM0MHk0bmFxc3RuamZudWM2bnNkMnc4YjdoeTBoNiZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/XhBIggZFu0fYNhcpao/giphy.gif",
+        answers: [
+            { text: "Kakashi", correct: true },
+            { text: "Jiraiya", correct: false },
+            { text: "Iruka", correct: false },
+            { text: "Yamato", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du clan de Shikamaru ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3Z293c25rNTN4bTByMHRpMmQxemxoczhmeG5rcXB1emR1ZmkxdDJnYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26evZjvGaxvlhGeqqL/giphy.gif",
+        answers: [
+            { text: "Nara", correct: true },
+            { text: "Akimichi", correct: false },
+            { text: "Yamanaka", correct: false },
+            { text: "Inuzuka", correct: false }
+        ]
+    },
+    {
+        question: "Qui a scellé Kaguya ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dTJvYnhmaDRvdnpjcGJ2OWN0cmZkaHA1cXVsNmpjZTV1OWJmbHd5YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/sWBzg2D15WwQjHcxbt/giphy.gif",
+        answers: [
+            { text: "Hagoromo et Hamura", correct: true },
+            { text: "Naruto et Sasuke", correct: false },
+            { text: "Madara", correct: false },
+            { text: "Hashirama", correct: false }
+        ]
+    },
+
+    // One Piece (15 questions)
+    {
+        question: "Qui était le second commandant de l’équipage de Roger ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dTJvYnhmaDRvdnpjcGJ2OWN0cmZkaHA1cXVsNmpjZTV1OWJmbHd5YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/sWBzg2D15WwQjHcxbt/giphy.gif",
+        answers: [
+            { text: "Silvers Rayleigh", correct: true },
+            { text: "Scopper Gaban", correct: false },
+            { text: "Shanks", correct: false },
+            { text: "Buggy", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le vrai nom de Gold Roger ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dTJvYnhmaDRvdnpjcGJ2OWN0cmZkaHA1cXVsNmpjZTV1OWJmbHd5YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/CKcuSizl9IhgMnrwwQ/giphy.gif",
+        answers: [
+            { text: "Gol D. Roger", correct: true },
+            { text: "Gold D. Roger", correct: false },
+            { text: "Roger D. Gold", correct: false },
+            { text: "Gol Roger", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le fruit du démon de Trafalgar Law ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dTJvYnhmaDRvdnpjcGJ2OWN0cmZkaHA1cXVsNmpjZTV1OWJmbHd5YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/srQZgMVIdWolmZwdLt/giphy.gif",
+        answers: [
+            { text: "Ope Ope no Mi", correct: true },
+            { text: "Mera Mera no Mi", correct: false },
+            { text: "Yami Yami no Mi", correct: false },
+            { text: "Ito Ito no Mi", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le premier membre de l'équipage de Luffy ?",
+        image: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXlvZ3g2MHJobmYwN3F1NmF0MXVlOGUwanh5aWZiOGg1Z2NsdXlreiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/srQZgMVIdWolmZwdLt/giphy.gif",
+        answers: [
+            { text: "Zoro", correct: true },
+            { text: "Nami", correct: false },
+            { text: "Usopp", correct: false },
+            { text: "Sanji", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le véritable nom de Barbe Noire ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZTNldXRlN2Ryd2Y4bjdwMm9tdzloeGt4MW0wdWEzaDRwMGlub2hzZyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/4nDVQzKlK10eNrmNDN/giphy.gif",
+        answers: [
+            { text: "Marshall D. Teach", correct: true },
+            { text: "Edward Newgate", correct: false },
+            { text: "Charlotte Linlin", correct: false },
+            { text: "Kaido", correct: false }
+        ]
+    },
+    {
+        question: "Quel fruit du démon a mangé Kuzan (Aokiji) ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZTNldXRlN2Ryd2Y4bjdwMm9tdzloeGt4MW0wdWEzaDRwMGlub2hzZyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/YL0HANB9pkuZXEQ8Kg/giphy.gif",
+        answers: [
+            { text: "Hie Hie no Mi", correct: true },
+            { text: "Magu Magu no Mi", correct: false },
+            { text: "Pika Pika no Mi", correct: false },
+            { text: "Yami Yami no Mi", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le roi des pirates avant Gol D. Roger ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OWl6YTQ5c21oajJrM3dmd3Q0ZDh0cXRidGdjZ2t1bmtjZGplMHJjdiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/m3YPGxF6jRofBVF6dT/giphy.gif",
+        answers: [
+            { text: "Rocks D. Xebec", correct: true },
+            { text: "Edward Newgate", correct: false },
+            { text: "Shiki", correct: false },
+            { text: "Captain John", correct: false }
+        ]
+    },
+    {
+        question: "Quelle est la prime actuelle de Luffy ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZTNldXRlN2Ryd2Y4bjdwMm9tdzloeGt4MW0wdWEzaDRwMGlub2hzZyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/u55ZJakW2vmp6Gsa54/giphy.gif",
+        answers: [
+            { text: "3 milliards", correct: true },
+            { text: "1.5 milliard", correct: false },
+            { text: "2 milliards", correct: false },
+            { text: "4 milliards", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du capitaine du Sunny ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cGJ0bzV1eHk5MDBtdmpkNGIzMThwZzY2bGppeW5qam1vczdjdnlycCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/W71h54dwXcMfD8QRsf/giphy.gif",
+        answers: [
+            { text: "Monkey D. Luffy", correct: true },
+            { text: "Zoro", correct: false },
+            { text: "Sanji", correct: false },
+            { text: "Franky", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du premier Pirate à atteindre Laugh Tale ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/li7H27JwLTBxeeXgJ8/giphy.gif",
+        answers: [
+            { text: "Gol D. Roger", correct: true },
+            { text: "Barbe Blanche", correct: false },
+            { text: "Shanks", correct: false },
+            { text: "Kaido", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le maître de Luffy ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cGJ0bzV1eHk5MDBtdmpkNGIzMThwZzY2bGppeW5qam1vczdjdnlycCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/Rk68Z85QwWq9btnP3a/giphy.gif",
+        answers: [
+            { text: "Shanks", correct: true },
+            { text: "Rayleigh", correct: false },
+            { text: "Garp", correct: false },
+            { text: "Dadan", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le rêve de Zoro ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3F4anNydzB5anRsYWVxNmszYmFuYnBhNGowZGppNWdkNDExZ3FvaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IKFVtPf8jP6KJH16dB/giphy.gif",
+        answers: [
+            { text: "Meilleur épéiste", correct: true },
+            { text: "Roi des pirates", correct: false },
+            { text: "Amiral", correct: false },
+            { text: "Cartographe", correct: false }
+        ]
+    },
+    {
+        question: "Qui a formé Sanji ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3F4anNydzB5anRsYWVxNmszYmFuYnBhNGowZGppNWdkNDExZ3FvaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/12bF3AWU423YeA/giphy.gif",
+        answers: [
+            { text: "Zeff", correct: true },
+            { text: "Ivanov", correct: false },
+            { text: "Jinbe", correct: false },
+            { text: "Rayleigh", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le fruit de Barbe Noire ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3F4anNydzB5anRsYWVxNmszYmFuYnBhNGowZGppNWdkNDExZ3FvaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/6GIyCdCSkU05ECsxEP/giphy.gif",
+        answers: [
+            { text: "Yami Yami no Mi", correct: true },
+            { text: "Gura Gura no Mi", correct: false },
+            { text: "Mera Mera no Mi", correct: false },
+            { text: "Hie Hie no Mi", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le capitaine des Heart Pirates ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3F4anNydzB5anRsYWVxNmszYmFuYnBhNGowZGppNWdkNDExZ3FvaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4ilFRqgbzbx4c/giphy.gif",
+        answers: [
+            { text: "Trafalgar Law", correct: true },
+            { text: "Eustass Kid", correct: false },
+            { text: "Monkey D. Luffy", correct: false },
+            { text: "Basil Hawkins", correct: false }
+        ]
+    },
+
+    // Bleach (10 questions)
+    {
+        question: "Qui a créé le Hogyoku dans Bleach ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VT2A7N6xBqQqSG7Nb1/giphy.gif",
+        answers: [
+            { text: "Kisuke Urahara", correct: true },
+            { text: "Sosuke Aizen", correct: false },
+            { text: "Yhwach", correct: false },
+            { text: "Ichigo Kurosaki", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le capitaine de la 1ère division dans Bleach ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/X5HzwMAgjBLWM/giphy.gif",
+        answers: [
+            { text: "Genryusai Yamamoto", correct: true },
+            { text: "Sosuke Aizen", correct: false },
+            { text: "Kenpachi Zaraki", correct: false },
+            { text: "Byakuya Kuchiki", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le père d'Ichigo ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/aDS8SjVtS3Mwo/giphy.gif",
+        answers: [
+            { text: "Isshin Kurosaki", correct: true },
+            { text: "Sosuke Aizen", correct: false },
+            { text: "Yhwach", correct: false },
+            { text: "Kisuke Urahara", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du Bankai d'Ichigo ?",
+        image: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTIxZjJkejBtbHV0aGJxYnVlbmQ0aGFiOWtkMnA1NW8zMWJxa3NjeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C9p5OvcSFWrte/giphy.gif",
+        answers: [
+            { text: "Tensa Zangetsu", correct: true },
+            { text: "Zangetsu", correct: false },
+            { text: "Muramasa", correct: false },
+            { text: "Hyorinmaru", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le capitaine de la 11e division ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ARkltSNV7z0A2MC6ME/giphy.gif",
+        answers: [
+            { text: "Kenpachi Zaraki", correct: true },
+            { text: "Byakuya Kuchiki", correct: false },
+            { text: "Toshiro Hitsugaya", correct: false },
+            { text: "Shunsui Kyoraku", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du Zanpakuto de Hitsugaya ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JRiAeFnqoFLtrHqttI/giphy.gif",
+        answers: [
+            { text: "Hyōrinmaru", correct: true },
+            { text: "Zangetsu", correct: false },
+            { text: "Benihime", correct: false },
+            { text: "Senbonzakura", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du Bankai de Byakuya ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bS7mnrlT27BzBg9EPu/giphy.gif",
+        answers: [
+            { text: "Senbonzakura Kageyoshi", correct: true },
+            { text: "Zangetsu", correct: false },
+            { text: "Hyorinmaru", correct: false },
+            { text: "Ryujin Jakka", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le roi des Hueco Mundo ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHRpdmFyZnVzOWl2cTA0YXFlMGQ4c3prczU5a2dscHlkcnp1YnVxYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/M1oPO3TchPJS/giphy.gif",
+        answers: [
+            { text: "Baraggan", correct: true },
+            { text: "Sosuke Aizen", correct: false },
+            { text: "Ulquiorra", correct: false },
+            { text: "Grimmjow", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le père d'Uryu Ishida ?",
+        image: "https://m.media-amazon.com/images/I/81Fp97RgUQL._AC_UF1000,1000_QL80_.jpg",
+        answers: [
+            { text: "Ryuken Ishida", correct: true },
+            { text: "Soken Ishida", correct: false },
+            { text: "Mayuri Kurotsuchi", correct: false },
+            { text: "Kisuke Urahara", correct: false }
+        ]
+    },
+
+    // Demon Slayer (8 questions)
+    {
+        question: "Quel est le nom du démon de Zenitsu ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/rvmwp6BNGUkL8Dxy8E/giphy.gif",
+        answers: [
+            { text: "Kaigaku", correct: true },
+            { text: "Akaza", correct: false },
+            { text: "Daki", correct: false },
+            { text: "Gyutaro", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le vrai nom de Muzan ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3eW93ODZuM2dmenlzNHFiOXpheXVlNjJjNHB0cmUyOHFmMXR1ZWNybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Jn1ywiZuQ7bl0tKz0w/giphy.gif",
+        answers: [
+            { text: "Muzan Kibutsuji", correct: true },
+            { text: "Muzan Akaza", correct: false },
+            { text: "Muzan Daki", correct: false },
+            { text: "Muzan Rengoku", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom de la sœur de Tanjiro ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/hsVQJupQ3t1YFOq1nG/giphy.gif",
+        answers: [
+            { text: "Nezuko", correct: true },
+            { text: "Shinobu", correct: false },
+            { text: "Kanao", correct: false },
+            { text: "Aoi", correct: false }
+        ]
+    },
+    {
+        question: "Quel pilier utilise la respiration du feu ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3eW93ODZuM2dmenlzNHFiOXpheXVlNjJjNHB0cmUyOHFmMXR1ZWNybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Q0sehGVRU9eHGe7mIc/giphy.gif",
+        answers: [
+            { text: "Rengoku", correct: true },
+            { text: "Tanjiro", correct: false },
+            { text: "Tomioka", correct: false },
+            { text: "Shinobu", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le pilier du vent ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/eGTu62JxaN8lsJzf4y/giphy.gif",
+        answers: [
+            { text: "Sanemi", correct: true },
+            { text: "Muichiro", correct: false },
+            { text: "Obanai", correct: false },
+            { text: "Mitsuri", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du démon supérieur numéro 1 ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/63IqdUVg9HjDMG9NKF/giphy.gif",
+        answers: [
+            { text: "Kokushibo", correct: true },
+            { text: "Akaza", correct: false },
+            { text: "Doma", correct: false },
+            { text: "Gyutaro", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le fondateur des Hashira ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/zeDVACztUc43ltMmmP/giphy.gif",
+        answers: [
+            { text: "Yoriichi", correct: true },
+            { text: "Kagaya", correct: false },
+            { text: "Urokodaki", correct: false },
+            { text: "Rengoku", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le pilier de l'eau ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnpnZHcxaTY0N3l3d2lpOXYydmVkM2FoZXYyNnlkOGYyaW91eXgybiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/D08OyL6azDZj3kE8SQ/giphy.gif",
+        answers: [
+            { text: "Tomioka", correct: true },
+            { text: "Rengoku", correct: false },
+            { text: "Sanemi", correct: false },
+            { text: "Muichiro", correct: false }
+        ]
+    },
+
+    // Dragon Ball (6 questions)
+    {
+        question: "Quel est le vrai nom de Mr Satan ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kAvK3nyLh7SHdAkJ8e/giphy.gif",
+        answers: [
+            { text: "Hercule", correct: true },
+            { text: "Mark", correct: false },
+            { text: "Paul", correct: false },
+            { text: "Jean", correct: false }
+        ]
+    },
+    {
+        question: "Combien de Super Saiyan existe-t-il officiellement ?",
+        image: "https://m.media-amazon.com/images/I/81Io2lSrCBL._AC_UF1000,1000_QL80_.jpg",
+        answers: [
+            { text: "5", correct: true },
+            { text: "3", correct: false },
+            { text: "7", correct: false },
+            { text: "4", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du père de Goku ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/QhamuOkOSHAbVBFJw6/giphy.gif",
+        answers: [
+            { text: "Bardock", correct: true },
+            { text: "Raditz", correct: false },
+            { text: "King Vegeta", correct: false },
+            { text: "Broly", correct: false }
+        ]
+    },
+    {
+        question: "Combien y a-t-il de Dragon Balls ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/2YMmLRC7EegIg0Rc1b/giphy.gif",
+        answers: [
+            { text: "7", correct: true },
+            { text: "6", correct: false },
+            { text: "8", correct: false },
+            { text: "5", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le créateur des androïdes ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/wiaoWlW17fqIo/giphy.gif",
+        answers: [
+            { text: "Docteur Gero", correct: true },
+            { text: "Bulma", correct: false },
+            { text: "Freezer", correct: false },
+            { text: "Cell", correct: false }
+        ]
+    },
+    {
+        question: "Qui est le premier Super Saiyan ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3ZvZm15NGg1a3R5dTNqbGwxOHVlbWVhcm95MmFvZnVnYXU3amcweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LBXypXWAvK6bNiik04/giphy.gif",
+        answers: [
+            { text: "Yamoshi", correct: true },
+            { text: "Goku", correct: false },
+            { text: "Vegeta", correct: false },
+            { text: "Bardock", correct: false }
+        ]
+    },
+
+    // Attack on Titan (3 questions)
+    {
+        question: "Quel est le vrai nom du Titan Bestial ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXk0c2Z4bHhrNG1pYjdxdDl4OGh3ajlwc2xqeXR4YXhuZnFub2ZweSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/zwPRprvrP4Lm0/giphy.gif",
+        answers: [
+            { text: "Zeke Yeager", correct: true },
+            { text: "Eren Yeager", correct: false },
+            { text: "Reiner Braun", correct: false },
+            { text: "Grisha Yeager", correct: false }
+        ]
+    },
+    {
+        question: "Quel est le nom du père d'Eren ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXk0c2Z4bHhrNG1pYjdxdDl4OGh3ajlwc2xqeXR4YXhuZnFub2ZweSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZTZUJgIKSMLupIqZU/giphy.gif",
+        answers: [
+            { text: "Grisha Yeager", correct: true },
+            { text: "Zeke", correct: false },
+            { text: "Reiner", correct: false },
+            { text: "Kenny", correct: false }
+        ]
+    },
+
+    // Hunter x Hunter (1 question)
+    {
+        question: "Qui est le créateur du Nen dans Hunter x Hunter ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXk0c2Z4bHhrNG1pYjdxdDl4OGh3ajlwc2xqeXR4YXhuZnFub2ZweSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/mhcdZNxRp9e5oZM87O/giphy.gif",
+        answers: [
+            { text: "Anciennes civilisations", correct: true },
+            { text: "Wing", correct: false },
+            { text: "Isaac Netero", correct: false },
+            { text: "Ging", correct: false }
+        ]
+    },
+
+    {
+        question: "QUI EST YANN",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXk0c2Z4bHhrNG1pYjdxdDl4OGh3ajlwc2xqeXR4YXhuZnFub2ZweSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/stSQAHuR9Ncqs/giphy.gif",
+        answers: [
+            { text: "LE CODEUR QUI A ECRIT DU PHP POUR LA NAZA", correct: true },
+            { text: "Shisui Uchiwa", correct: false },
+            { text: "Madara Uchiwa", correct: false },
+            { text: "Obito Uchiwa", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du royaume d’origine de Barbe Noire dans One Piece ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXk0c2Z4bHhrNG1pYjdxdDl4OGh3ajlwc2xqeXR4YXhuZnFub2ZweSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l1KVbx9exHG1EGeQw/giphy.gif",
+        answers: [
+            { text: "Dressrosa", correct: false },
+            { text: "Île Karai Bari", correct: false },
+            { text: "Royaume de Goa", correct: false },
+            { text: "Royaume de Sorbet", correct: true }
+        ]
+    },
+
+    {
+        question: "Quel est le numéro du Titan d’Attaque possédé par Eren ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3YjlhYmh1MzZqZnIxbmJvZ25lbmF1MXhtdGFsY2tka2t2dnZhYmV0aCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/dIadlQ1ZhfkW91KBzB/giphy.gif",
+        answers: [
+            { text: "Titan Originel", correct: false },
+            { text: "Titan Assaillant", correct: true },
+            { text: "Titan Bestial", correct: false },
+            { text: "Titan Cuirassé", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom complet de Light dans Death Note ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11YMFLRM0gWZ1u/giphy.gif",
+        answers: [
+            { text: "Light Yagami", correct: true },
+            { text: "Light Kira", correct: false },
+            { text: "Raito Kami", correct: false },
+            { text: "Yami Light", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom de la technique interdite utilisée par Rock Lee contre Gaara ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Nzz86dByLtYTS/giphy.gif",
+        answers: [
+            { text: "Portes célestes", correct: true },
+            { text: "Chidori", correct: false },
+            { text: "Rasengan", correct: false },
+            { text: "Amaterasu", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le vrai nom de Doflamingo ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/qMnhxcHyeBJDFlxnZa/giphy.gif",
+        answers: [
+            { text: "Donquixote Doflamingo", correct: true },
+            { text: "Trafalgar Doflamingo", correct: false },
+            { text: "Rocks Doflamingo", correct: false },
+            { text: "Marshall Doflamingo", correct: false }
+        ]
+    },
+
+    {
+        question: "Qui a tué Kira dans Death Note ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/a7uzy0R9zNpJAGzU0q/giphy.gif",
+        answers: [
+            { text: "L", correct: false },
+            { text: "Near", correct: false },
+            { text: "Ryuk", correct: true },
+            { text: "Misa", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du premier Hashira mort dans Demon Slayer ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/u7BH5AU0K0yZ2Vb6ON/giphy.gif",
+        answers: [
+            { text: "Rengoku", correct: true },
+            { text: "Tengen", correct: false },
+            { text: "Giyu", correct: false },
+            { text: "Sanemi", correct: false }
+        ]
+    },
+
+    {
+        question: "Qui est le père de Gon dans Hunter x Hunter ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTNwd2xlbXFrNXVtamJkcHUwd3hicW5ldXlzNXEyODBkczVobWhpZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/TY8cdHiraZoBqVsqa5/giphy.gif",
+        answers: [
+            { text: "Ging Freecss", correct: true },
+            { text: "Silva Zoldyck", correct: false },
+            { text: "Netero", correct: false },
+            { text: "Chrollo", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du Quincy roi dans Bleach ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bTlsODgzcnp6MW44ejVjd243bGJoYXhuMGI3MTNlZjl5aDI2M3ZvdyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/Q7jwzE2VN1OU7sAyYl/giphy.gif",
+        answers: [
+            { text: "Aizen", correct: false },
+            { text: "Yhwach", correct: true },
+            { text: "Urahara", correct: false },
+            { text: "Ichigo", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le vrai nom de Meliodas dans Seven Deadly Sins ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MmNpYzU4YnoyYTRmeTVrODRrc2c1MDh1ZWZkcjB5OW85NjZ4aGQ1aCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/LEV3OJQG0XXnq/giphy.gif",
+        answers: [
+            { text: "Meliodas Dragon", correct: false },
+            { text: "Meliodas Demon King", correct: false },
+            { text: "Meliodas Liones", correct: true },
+            { text: "Meliodas Britannia", correct: false }
+        ]
+    },
+
+    {
+        question: "Qui a fondé l’Akatsuki à l’origine ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MmNpYzU4YnoyYTRmeTVrODRrc2c1MDh1ZWZkcjB5OW85NjZ4aGQ1aCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/Ae8KCy7nwcb5u/giphy.gif",
+        answers: [
+            { text: "Nagato", correct: true },
+            { text: "Itachi", correct: false },
+            { text: "Obito", correct: false },
+            { text: "Madara", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom de l’arc final de Bleach ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MmNpYzU4YnoyYTRmeTVrODRrc2c1MDh1ZWZkcjB5OW85NjZ4aGQ1aCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/EISCSnkhj5PjO/giphy.gif",
+        answers: [
+            { text: "Arrancar Arc", correct: false },
+            { text: "Soul Society Arc", correct: false },
+            { text: "Thousand-Year Blood War", correct: true },
+            { text: "Hueco Mundo", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du clan de Levi dans Attack on Titan ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MmNpYzU4YnoyYTRmeTVrODRrc2c1MDh1ZWZkcjB5OW85NjZ4aGQ1aCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/MlTMwvO9ZiWwU/giphy.gif",
+        answers: [
+            { text: "Ackerman", correct: true },
+            { text: "Yeager", correct: false },
+            { text: "Reiss", correct: false },
+            { text: "Braun", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du pouvoir spécial de Gojo dans Jujutsu Kaisen ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bDVrNDh6dnJyOGhuM2htZGZxeXdnbjlqZGc3NDZzbHVpdDJobzgxMSZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/Gev6zrYpjpYWY/giphy.gif",
+        answers: [
+            { text: "Six Eyes", correct: true },
+            { text: "Black Flash", correct: false },
+            { text: "Domain Slash", correct: false },
+            { text: "Limit Break", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du capitaine de la 10e division dans Bleach ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3d2pueTc5YXZ6cWt4aTd5ZHhldGp0MGZ6czRqZmVhazkxaGFzbjZ3MCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/Nzz86dByLtYTS/giphy.gif",
+        answers: [
+            { text: "Hitsugaya", correct: true },
+            { text: "Kenpachi", correct: false },
+            { text: "Byakuya", correct: false },
+            { text: "Aizen", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du premier utilisateur du One For All ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3d2pueTc5YXZ6cWt4aTd5ZHhldGp0MGZ6czRqZmVhazkxaGFzbjZ3MCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/HXe4JQGgxe3fO/giphy.gif",
+        answers: [
+            { text: "Yoichi Shigaraki", correct: true },
+            { text: "All Might", correct: false },
+            { text: "Deku", correct: false },
+            { text: "All For One", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du sabre de Zoro le plus puissant actuellement ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bDVrNDh6dnJyOGhuM2htZGZxeXdnbjlqZGc3NDZzbHVpdDJobzgxMSZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/u7rUxHdLl8OKA/giphy.gif",
+        answers: [
+            { text: "Enma", correct: true },
+            { text: "Wado Ichimonji", correct: false },
+            { text: "Sandai Kitetsu", correct: false },
+            { text: "Shusui", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du roi démon dans Black Clover ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bDVrNDh6dnJyOGhuM2htZGZxeXdnbjlqZGc3NDZzbHVpdDJobzgxMSZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/0zkIxBxgly7p9N6XQu/giphy.gif",
+        answers: [
+            { text: "Lucifero", correct: true },
+            { text: "Zagred", correct: false },
+            { text: "Asta", correct: false },
+            { text: "Yuno", correct: false }
+        ]
+    },
+
+    {
+        question: "Quel est le nom du pouvoir ultime de Tanjiro ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/oCTI1Njl6Q7UyKN4SJ/giphy.gif",
+        answers: [
+            { text: "Respiration du Soleil", correct: true },
+            { text: "Respiration de l’Eau", correct: false },
+            { text: "Respiration du Vent", correct: false },
+            { text: "Respiration du Feu", correct: false }
+        ]
+    },
+
+    // Jujutsu Kaisen (1 question)
+    {
+        question: "Quel est le nom du démon de Megumi dans JJK ?",
+        image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHhuYTZsYmJ3YnZncWQwa2lxYTJlbWQ2NzRnaDhyMmtwdG1qbXk3ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BGZTfUlsBmgaPLmKiN/giphy.gif",
+        answers: [
+            { text: "Mahoraga", correct: true },
+            { text: "Sukuna", correct: false },
+            { text: "Hanami", correct: false },
+            { text: "Jogo", correct: false }
+        ]
+    }
+];
+
+let currentQuestionIndex = 0;
+let scorePoints = 0;
+const totalQuestions = questions.length;
+
+const questionElement = document.getElementById("question");
+const answersContainer = document.getElementById("answers");
+const resultContainer = document.getElementById("result");
+const scoreElement = document.getElementById("score");
+const scorePointsElement = document.getElementById("score-points");
+const victoryMessageElement = document.getElementById("victoryMessage");
+const imageElement = document.getElementById("question-image");
+const progressElement = document.getElementById("progress");
+const timerProgress = document.getElementById("timer-progress");
+const timerText = document.getElementById("timer-text");
+
+function updateScoreDisplay() {
+    scorePointsElement.textContent = scorePoints;
+}
+
+function startQuiz() {
+    currentQuestionIndex = 0;
+    scorePoints = 0;
+    updateScoreDisplay();
+    victoryMessageElement.classList.add("hidden");
+    resultContainer.classList.add("hidden");
+    document.getElementById("question-container").classList.remove("hidden");
+    showQuestion();
+}
+
+function showQuestion() {
+    resetState();
+    
+    if (currentQuestionIndex >= totalQuestions) {
+        showResult();
+        return;
+    }
+
+    const currentQuestion = questions[currentQuestionIndex];
+    
+    // Mise à jour du texte
+    questionElement.textContent = currentQuestion.question;
+    
+    // Mise à jour de l'image
+    if (currentQuestion.image) {
+        imageElement.src = currentQuestion.image;
+        imageElement.alt = "Image " + currentQuestion.question;
+    }
+    
+    // Créer une copie des réponses et les mélanger
+    const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
+    
+    // Création des boutons de réponse avec les réponses mélangées
+    shuffledAnswers.forEach(answer => {
+        const button = document.createElement("button");
+        button.textContent = answer.text;
+        button.addEventListener("click", () => selectAnswer(answer, button));
+        answersContainer.appendChild(button);
+    });
+    
+    // Mise à jour de la progression
+    updateProgress();
+    
+    // Démarrer le timer
+    startTimer();
+}
+
+function startTimer() {
+    timeLeft = 20;
+    timerActive = true;
+    timerProgress.style.width = '100%';
+    timerText.textContent = '⏱️ 20 secondes';
+    timerText.classList.remove('warning');
+    
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    timerInterval = setInterval(() => {
+        if (!timerActive) return;
+        
+        timeLeft--;
+        const percentage = (timeLeft / 20) * 100;
+        timerProgress.style.width = percentage + '%';
+        timerText.textContent = `⏱️ ${timeLeft} seconde${timeLeft > 1 ? 's' : ''}`;
+        
+        if (timeLeft <= 5) {
+            timerText.classList.add('warning');
+        }
+        
+        if (timeLeft <= 0) {
+            // Temps écoulé
+            clearInterval(timerInterval);
+            timerActive = false;
+            
+            // Désactiver tous les boutons
+            Array.from(answersContainer.children).forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // Montrer la bonne réponse
+            Array.from(answersContainer.children).forEach(btn => {
+                const answerObj = questions[currentQuestionIndex].answers.find(a => a.text === btn.textContent);
+                if (answerObj && answerObj.correct) {
+                    btn.classList.add("correct");
+                }
+            });
+            
+            // Passer à la question suivante après 2 secondes
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < totalQuestions) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 2000);
+        }
+    }, 1000);
+}
+
+function resetState() {
+    answersContainer.innerHTML = "";
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    timerActive = false;
+}
+
+function selectAnswer(answer, button) {
+    if (!timerActive) return; // Empêcher de répondre si le timer est fini
+    
+    timerActive = false;
+    clearInterval(timerInterval);
+    
+    // Désactiver tous les boutons
+    Array.from(answersContainer.children).forEach(btn => {
+        btn.disabled = true;
+    });
+    
+    // Colorier les réponses et ajouter les points
+    if (answer.correct) {
+        button.classList.add("correct");
+        scorePoints += POINTS_PAR_QUESTION;
+        updateScoreDisplay();
+    } else {
+        button.classList.add("wrong");
+        // Montrer la bonne réponse
+        Array.from(answersContainer.children).forEach(btn => {
+            const answerObj = questions[currentQuestionIndex].answers.find(a => a.text === btn.textContent);
+            if (answerObj && answerObj.correct) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+    
+    // Passer à la question suivante après 2 secondes
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < totalQuestions) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }, 2000);
+}
+
+function showResult() {
+    document.getElementById("question-container").classList.add("hidden");
+    resultContainer.classList.remove("hidden");
+    
+    const percentage = Math.round((scorePoints / SCORE_MAX) * 100);
+    scoreElement.innerHTML = `Score : ${scorePoints} / ${SCORE_MAX} points (${percentage}%)<br><br>`;
+    
+    // Vérifier si le score maximum est atteint
+    if (scorePoints === SCORE_MAX) {
+        victoryMessageElement.classList.remove("hidden");
+    }
+    
+    // Message personnalisé selon le score
+    let message = "";
+    if (scorePoints === SCORE_MAX) message = "🏆 PARFAIT ! VOUS ÊTES UN LÉGENDE ! 🏆";
+    else if (scorePoints >= 500) message = "🌟 Excellent niveau !";
+    else if (scorePoints >= 400) message = "👍 Très bon score !";
+    else if (scorePoints >= 300) message = "📚 Continuez vos lectures !";
+    else message = "🎯 Encore un peu d'entraînement !";
+    
+    scoreElement.innerHTML += message;
+}
+
+function updateProgress() {
+    progressElement.textContent = `Question ${currentQuestionIndex + 1} / ${totalQuestions}`;
+}
+
+function restartQuiz() {
+    startQuiz();
+}
+
+// Démarrer le quiz
+startQuiz();
+
+// Lecture automatique de la musique au chargement de la page
+window.addEventListener('load', function() {
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.3; // Volume à 30%
+    
+    // Tentative de lecture automatique
+    bgMusic.play().catch(function(error) {
+        console.log("Lecture automatique bloquée par le navigateur");
+        
+        // Solution de secours : démarrer au premier clic n'importe où
+        document.addEventListener('click', function playOnClick() {
+            bgMusic.play();
+            document.removeEventListener('click', playOnClick);
+        }, { once: true });
+    });
+});
+</script>
+</body>
+</html>
