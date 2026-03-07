@@ -8,118 +8,108 @@
 <style>
 
 /* ===== BODY ===== */
-body {
-  margin: 0;
-  padding-top: 100px; /* espace pour le header fixe */
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  background-color: black; /* couleur de fallback */
-}
+body{
+  margin:0;
+  padding-top:100px;
+  min-height:100vh;
+  font-family:Arial, sans-serif;
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("pain.jpg");
-  background-position: center;
-  background-size: contain; /* image non zoomée */
-  background-repeat: repeat;
-  background-attachment: scroll;
-  z-index: -1;
-  opacity: 0.7; /* overlay léger */
-  filter: brightness(0.5); /* assombrit l'image pour le texte */
+  background:
+  linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+  url("pain.jpg");
+
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-attachment:scroll;
 }
 
 /* ===== HEADER ===== */
-header {
-  width: 100%;
-  height: 80px;
-  background-color: #010626;
-  color: white;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+header{
+  width:100%;
+  height:80px;
+  background-color:#010626;
+  color:white;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-/* ===== TITRE ANIMÉ ===== */
-h2 {
-  font-weight: 900;
-  background: linear-gradient(to right, #fbbf24, #f472b6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: zoomOut 3s ease-out forwards;
-  opacity: 0;
+/* ===== TITRE ===== */
+
+h2{
+  font-weight:900;
+  background:linear-gradient(to right,#fbbf24,#f472b6);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:zoomOut 2s ease-out forwards;
 }
 
-@keyframes zoomOut {
-  0% {
-    transform: scale(3);
-    opacity: 0;
-    font-size: 3rem;
+@keyframes zoomOut{
+  from{
+    transform:scale(1.6);
+    opacity:0;
   }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-    font-size: 1.8rem;
+  to{
+    transform:scale(1);
+    opacity:1;
   }
 }
 
 /* ===== FORMULAIRE ===== */
-.contenaire {
-  margin: auto;
-  width: 90%;
-  max-width: 350px;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: white;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
+
+.contenaire{
+  margin:auto;
+  width:90%;
+  max-width:350px;
+  background-color:rgba(0,0,0,0.4);
+  color:white;
+  text-align:center;
+  padding:20px;
+  border-radius:10px;
 }
 
-input, textarea {
-  width: 90%;
-  padding: 8px;
-  border-radius: 10px;
-  border: none;
+input,textarea{
+  width:90%;
+  padding:8px;
+  border-radius:10px;
+  border:none;
 }
 
-button {
-  background-color: orange;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
+button{
+  background-color:orange;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:5px;
+  cursor:pointer;
+  transition:0.3s;
 }
 
-button:hover {
-  background-color: white;
-  color: black;
+button:hover{
+  background-color:white;
+  color:black;
 }
 
 /* ===== TEXTE BAS ===== */
-p {
-  width: 90%;
-  max-width: 600px;
-  margin: 40px auto;
-  background-color: rgba(0, 0, 0, 0);
-  color: orange;
-  padding: 15px;
-  text-align: center;
-  border-radius: 10px;
+
+p{
+  width:90%;
+  max-width:600px;
+  margin:40px auto;
+  color:orange;
+  padding:15px;
+  text-align:center;
 }
 
-em {
-  color: white;
+em{
+  color:white;
 }
 
 </style>
@@ -128,24 +118,24 @@ em {
 <body>
 
 <header>
-  <h2>BIENVENUE SUR MANGA ZONE</h2>
+<h2>BIENVENUE SUR MANGA ZONE</h2>
 </header>
 
 <form action="manga.html" method="get">
-  <div class="contenaire">
+<div class="contenaire">
 
-    <label for="nom">Nom :</label><br>
-    <input type="text" id="nom" name="nom" placeholder="Pseudo" required><br><br>
+<label>Nom :</label><br>
+<input type="text" placeholder="Pseudo" required><br><br>
 
-    <label for="password">Mot de passe :</label><br>
-    <input type="password" id="password" name="password" placeholder="Code secret" required><br><br>
+<label>Mot de passe :</label><br>
+<input type="password" placeholder="Code secret" required><br><br>
 
-    <label for="message">Message :</label><br>
-    <textarea id="message" name="message" rows="4" placeholder="Meilleur manga selon toi ?" required></textarea><br><br>
+<label>Message :</label><br>
+<textarea rows="4" placeholder="Meilleur manga selon toi ?" required></textarea><br><br>
 
-    <button type="submit">Commencer</button>
+<button type="submit">Commencer</button>
 
-  </div>
+</div>
 </form>
 
 <p>
@@ -156,13 +146,11 @@ Son pouvoir vient du Rinnegan, un dōjutsu légendaire.
 Pain contrôle six corps, les « Six Chemins de la douleur ».
 Il croit que la paix ne peut naître que de la douleur.
 Son affrontement avec Naruto est une lutte idéologique.
+
 <br><br>
+
 <em>“La paix ne peut exister sans la douleur.”</em>
 </p>
 
 </body>
 </html>
-
-
-
-
